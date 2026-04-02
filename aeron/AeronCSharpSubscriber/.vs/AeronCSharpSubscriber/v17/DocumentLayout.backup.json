@@ -1,0 +1,71 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\dhkim\\source\\repos\\AeronCSharpSubscriber\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{228E0C59-EFDD-40A2-A629-292AE480024C}|AeronCSharpSubscriber.csproj|C:\\Users\\dhkim\\source\\repos\\AeronCSharpSubscriber\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{228E0C59-EFDD-40A2-A629-292AE480024C}|AeronCSharpSubscriber.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{228E0C59-EFDD-40A2-A629-292AE480024C}|AeronCSharpSubscriber.csproj|c:\\users\\dhkim\\source\\repos\\aeroncsharpsubscriber\\com\\hooniegit\\sbe\\messageheader.g.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{228E0C59-EFDD-40A2-A629-292AE480024C}|AeronCSharpSubscriber.csproj|solutionrelative:com\\hooniegit\\sbe\\messageheader.g.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{228E0C59-EFDD-40A2-A629-292AE480024C}|AeronCSharpSubscriber.csproj|c:\\users\\dhkim\\source\\repos\\aeroncsharpsubscriber\\com\\hooniegit\\sbe\\singledatamessage.g.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{228E0C59-EFDD-40A2-A629-292AE480024C}|AeronCSharpSubscriber.csproj|solutionrelative:com\\hooniegit\\sbe\\singledatamessage.g.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MessageHeader.g.cs",
+              "DocumentMoniker": "C:\\Users\\dhkim\\source\\repos\\AeronCSharpSubscriber\\Com\\Hooniegit\\Sbe\\MessageHeader.g.cs",
+              "RelativeDocumentMoniker": "Com\\Hooniegit\\Sbe\\MessageHeader.g.cs",
+              "ToolTip": "C:\\Users\\dhkim\\source\\repos\\AeronCSharpSubscriber\\Com\\Hooniegit\\Sbe\\MessageHeader.g.cs",
+              "RelativeToolTip": "Com\\Hooniegit\\Sbe\\MessageHeader.g.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAQwBQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-02T01:35:20.819Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SingleDataMessage.g.cs",
+              "DocumentMoniker": "C:\\Users\\dhkim\\source\\repos\\AeronCSharpSubscriber\\Com\\Hooniegit\\Sbe\\SingleDataMessage.g.cs",
+              "RelativeDocumentMoniker": "Com\\Hooniegit\\Sbe\\SingleDataMessage.g.cs",
+              "ToolTip": "C:\\Users\\dhkim\\source\\repos\\AeronCSharpSubscriber\\Com\\Hooniegit\\Sbe\\SingleDataMessage.g.cs",
+              "RelativeToolTip": "Com\\Hooniegit\\Sbe\\SingleDataMessage.g.cs",
+              "ViewState": "AgIAAD0AAAAAAAAAAAAUwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-02T01:34:13.305Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\dhkim\\source\\repos\\AeronCSharpSubscriber\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\dhkim\\source\\repos\\AeronCSharpSubscriber\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAowBYAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-02T00:55:02.929Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
