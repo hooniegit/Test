@@ -33,7 +33,7 @@ public class TestComponent {
         while (true) {
             String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS"));
             generateTagData();
-            this.dataPublisher.publishListDataMessaage(dataList, timestamp);
+            this.dataPublisher.publishListDataMessage(dataList, timestamp);
             this.dataList.clear();
             Thread.sleep(1);
         }
@@ -41,7 +41,7 @@ public class TestComponent {
     }
 
     public void generateTagData() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5000; i++) {
             this.dataList.add(new TagData<Double>(i, 100.0 + i));
         }
     }

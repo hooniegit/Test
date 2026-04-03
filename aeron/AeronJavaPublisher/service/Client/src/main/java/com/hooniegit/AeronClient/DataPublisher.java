@@ -5,7 +5,6 @@ import com.hooniegit.sbe.MessageHeaderEncoder;
 import com.hooniegit.sbe.SingleDataMessageEncoder;
 import io.aeron.Aeron;
 import io.aeron.Publication;
-import io.aeron.driver.MediaDriver;
 import org.agrona.concurrent.UnsafeBuffer;
 
 import java.nio.ByteBuffer;
@@ -14,26 +13,33 @@ import java.util.List;
 public class DataPublisher {
 
     private final String aeronDir = System.getProperty("java.io.tmpdir") + "/aeron-sbe-ipc";
-    private final MediaDriver.Context mediaDriverCtx = new MediaDriver.Context().aeronDirectoryName(aeronDir).dirDeleteOnStart(true);
 
+    // Aeron과 Publication은 하나만 생성하여 모든 스레드가 공유 (Thread-safe)
     private Aeron aeron;
     private Publication publication;
+    private volatile boolean isConnected = false;
 
-    private boolean isConnected = false;
+    // 🌟 [핵심] 스레드별로 독립적인 버퍼와 인코더를 가지도록 ThreadLocal 사용
+    private static final ThreadLocal<EncodingResources> TL_RESOURCES =
+            ThreadLocal.withInitial(EncodingResources::new);
 
-    private UnsafeBuffer buffer;
-    private MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
-    private SingleDataMessageEncoder singleEncoder = new SingleDataMessageEncoder();
-    private ListDataMessageEncoder listEncoder = new ListDataMessageEncoder();
+    // 스레드마다 하나씩 생성될 자원 컨테이너
+    private static class EncodingResources {
+        final UnsafeBuffer buffer = new UnsafeBuffer(ByteBuffer.allocateDirect(1_048_576));
+        final MessageHeaderEncoder headerEncoder = new MessageHeaderEncoder();
+        final SingleDataMessageEncoder singleEncoder = new SingleDataMessageEncoder();
+        final ListDataMessageEncoder listEncoder = new ListDataMessageEncoder();
+    }
+
+    // 싱글톤으로 사용하기 위한 기본 생성자
+    public DataPublisher() {}
 
     public void connect() {
-        try{
+        try {
             this.aeron = Aeron.connect(new Aeron.Context().aeronDirectoryName(aeronDir));
             this.publication = aeron.addPublication("aeron:ipc", 10);
-
-            this.buffer = new UnsafeBuffer(ByteBuffer.allocateDirect(33_554_432));
             this.isConnected = true;
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             this.isConnected = false;
         }
@@ -41,55 +47,56 @@ public class DataPublisher {
 
     public void publishSingleDataMessage(int id, double value, String timestamp) {
         if (!isConnected) {
-            throw new IllegalStateException("Aeron is not connected. Call connect() before publishing.");
+            throw new IllegalStateException("Aeron is not connected.");
         }
-        long result;
 
-        singleEncoder.wrapAndApplyHeader(buffer, 0, headerEncoder);
-        singleEncoder.id(id)
+        // 현재 실행 중인 스레드 전용 자원을 가져옴 (락 없이 Thread-safe 보장)
+        EncodingResources resources = TL_RESOURCES.get();
+
+        resources.singleEncoder.wrapAndApplyHeader(resources.buffer, 0, resources.headerEncoder);
+        resources.singleEncoder.id(id)
                 .value(value)
                 .timestamp(timestamp);
-        int singleMsgLength = MessageHeaderEncoder.ENCODED_LENGTH + singleEncoder.encodedLength();
-        while ((result = publication.offer(buffer, 0, singleMsgLength)) < 0L) {
-            Thread.yield();
-        }
 
-        System.out.println("[Java] SingleDataMessage 전송 완료");
+        int msgLength = MessageHeaderEncoder.ENCODED_LENGTH + resources.singleEncoder.encodedLength();
+
+        long result;
+        while ((result = publication.offer(resources.buffer, 0, msgLength)) < 0L) {
+            Thread.yield(); // 백프레셔 발생 시 양보
+        }
     }
 
-    public void publishListDataMessaage(List<TagData<Double>> dataList, String timestamp) {
+    public void publishListDataMessage(List<TagData<Double>> dataList, String timestamp) {
         if (!isConnected) {
-            throw new IllegalStateException("Aeron is not connected. Call connect() before publishing.");
+            throw new IllegalStateException("Aeron is not connected.");
         }
-        long result;
 
-        this.listEncoder.wrapAndApplyHeader(buffer, 0, headerEncoder);
+        EncodingResources resources = TL_RESOURCES.get();
 
-        ListDataMessageEncoder.EntriesEncoder entries = listEncoder.entriesCount(dataList.size());
+        resources.listEncoder.wrapAndApplyHeader(resources.buffer, 0, resources.headerEncoder);
+
+        ListDataMessageEncoder.EntriesEncoder entries = resources.listEncoder.entriesCount(dataList.size());
         for (TagData<Double> data : dataList) {
             entries.next()
                     .id(data.getId())
                     .value(data.getValue());
         }
-        this.listEncoder.timestamp(timestamp);
+        resources.listEncoder.timestamp(timestamp);
 
-        int listMsgLength = MessageHeaderEncoder.ENCODED_LENGTH + listEncoder.encodedLength();
+        int msgLength = MessageHeaderEncoder.ENCODED_LENGTH + resources.listEncoder.encodedLength();
 
-        while ((result = publication.offer(buffer, 0, listMsgLength)) < 0L) {
+        long result;
+        while ((result = publication.offer(resources.buffer, 0, msgLength)) < 0L) {
             Thread.yield();
         }
-
-        System.out.println("[Java] ListDataMessage 전송 완료 : " + timestamp);
     }
 
     public void disconnect() {
-        if (publication != null) {
-            publication.close();
-        }
-        if (aeron != null) {
-            aeron.close();
-        }
         this.isConnected = false;
-    }
+        if (publication != null) publication.close();
+        if (aeron != null) aeron.close();
 
+        // 메모리 릭 방지를 위해 현재 스레드의 로컬 자원 해제
+        TL_RESOURCES.remove();
+    }
 }
