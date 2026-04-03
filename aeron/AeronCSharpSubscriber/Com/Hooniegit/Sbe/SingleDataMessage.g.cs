@@ -14,7 +14,7 @@ namespace Com.Hooniegit.Sbe
     /// </summary>
     public sealed partial class SingleDataMessage
     {
-        public const ushort BlockLength = (ushort)12;
+        public const ushort BlockLength = (ushort)4;
         public const ushort TemplateId = (ushort)1;
         public const ushort SchemaId = (ushort)1;
         public const ushort SchemaVersion = (ushort)0;
@@ -145,6 +145,10 @@ namespace Com.Hooniegit.Sbe
 
         public const int ValueOffset = 4;
 
+        public const string ValueCharacterEncoding = "UTF-8";
+        public static Encoding ValueResolvedCharacterEncoding = Encoding.GetEncoding(ValueCharacterEncoding);
+
+
         public static string ValueMetaAttribute(MetaAttribute metaAttribute)
         {
             switch (metaAttribute)
@@ -158,22 +162,77 @@ namespace Com.Hooniegit.Sbe
             return "";
         }
 
-        public const double ValueNullValue = double.NaN;
-        public const double ValueMinValue = -1.7976931348623157E308d;
-        public const double ValueMaxValue = 1.7976931348623157E308d;
-
-        public double Value
+        public const int ValueHeaderSize = 4;
+        
+        public int ValueLength()
         {
-            get
-            {
-                return _buffer.DoubleGetLittleEndian(_offset + 4);
-            }
-            set
-            {
-                _buffer.DoublePutLittleEndian(_offset + 4, value);
-            }
+            _buffer.CheckLimit(_parentMessage.Limit + 4);
+            return (int)_buffer.Uint32GetLittleEndian(_parentMessage.Limit);
         }
 
+        public int GetValue(byte[] dst, int dstOffset, int length) =>
+            GetValue(new Span<byte>(dst, dstOffset, length));
+
+        public int GetValue(Span<byte> dst)
+        {
+            const int sizeOfLengthField = 4;
+            int limit = _parentMessage.Limit;
+            _buffer.CheckLimit(limit + sizeOfLengthField);
+            int dataLength = (int)_buffer.Uint32GetLittleEndian(limit);
+            int bytesCopied = Math.Min(dst.Length, dataLength);
+            _parentMessage.Limit = limit + sizeOfLengthField + dataLength;
+            _buffer.GetBytes(limit + sizeOfLengthField, dst.Slice(0, bytesCopied));
+
+            return bytesCopied;
+        }
+        
+        // Allocates and returns a new byte array
+        public byte[] GetValueBytes()
+        {
+            const int sizeOfLengthField = 4;
+            int limit = _parentMessage.Limit;
+            _buffer.CheckLimit(limit + sizeOfLengthField);
+            int dataLength = (int)_buffer.Uint32GetLittleEndian(limit);
+            byte[] data = new byte[dataLength];
+            _parentMessage.Limit = limit + sizeOfLengthField + dataLength;
+            _buffer.GetBytes(limit + sizeOfLengthField, data);
+
+            return data;
+        }
+
+        public int SetValue(byte[] src, int srcOffset, int length) =>
+            SetValue(new ReadOnlySpan<byte>(src, srcOffset, length));
+
+        public int SetValue(ReadOnlySpan<byte> src)
+        {
+            const int sizeOfLengthField = 4;
+            int limit = _parentMessage.Limit;
+            _parentMessage.Limit = limit + sizeOfLengthField + src.Length;
+            _buffer.Uint32PutLittleEndian(limit, (uint)src.Length);
+            _buffer.SetBytes(limit + sizeOfLengthField, src);
+
+            return src.Length;
+        }
+
+        public string GetValue()
+        {
+            const int sizeOfLengthField = 4;
+            int limit = _parentMessage.Limit;
+            _buffer.CheckLimit(limit + sizeOfLengthField);
+            int dataLength = (int)_buffer.Uint32GetLittleEndian(limit);
+            _parentMessage.Limit = limit + sizeOfLengthField + dataLength;
+            return _buffer.GetStringFromBytes(ValueResolvedCharacterEncoding, limit + sizeOfLengthField, dataLength);
+        }
+
+        public void SetValue(string value)
+        {
+            var encoding = ValueResolvedCharacterEncoding;
+            const int sizeOfLengthField = 4;
+            int limit = _parentMessage.Limit;
+            int byteCount = _buffer.SetBytesFromString(encoding, value, limit + sizeOfLengthField);
+            _parentMessage.Limit = limit + sizeOfLengthField + byteCount;
+            _buffer.Uint32PutLittleEndian(limit, (uint)byteCount);
+        }
 
         public const int TimestampId = 3;
         public const int TimestampSinceVersion = 0;
@@ -183,7 +242,7 @@ namespace Com.Hooniegit.Sbe
             return _actingVersion >= TimestampSinceVersion;
         }
 
-        public const int TimestampOffset = 12;
+        public const int TimestampOffset = -1;
 
         public const string TimestampCharacterEncoding = "UTF-8";
         public static Encoding TimestampResolvedCharacterEncoding = Encoding.GetEncoding(TimestampCharacterEncoding);
@@ -316,7 +375,7 @@ namespace Com.Hooniegit.Sbe
             builder.Append(this.Id);
             builder.Append('|');
             builder.Append("Value=");
-            builder.Append(this.Value);
+            builder.Append('\'').Append(GetValue()).Append('\'');
             builder.Append('|');
             builder.Append("Timestamp=");
             builder.Append('\'').Append(GetTimestamp()).Append('\'');

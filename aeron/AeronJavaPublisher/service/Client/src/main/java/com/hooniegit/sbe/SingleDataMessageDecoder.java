@@ -11,7 +11,7 @@ import org.agrona.DirectBuffer;
 @SuppressWarnings("all")
 public final class SingleDataMessageDecoder
 {
-    public static final int BLOCK_LENGTH = 12;
+    public static final int BLOCK_LENGTH = 4;
     public static final int TEMPLATE_ID = 1;
     public static final int SCHEMA_ID = 1;
     public static final int SCHEMA_VERSION = 0;
@@ -194,14 +194,9 @@ public final class SingleDataMessageDecoder
         return 0;
     }
 
-    public static int valueEncodingOffset()
+    public static String valueCharacterEncoding()
     {
-        return 4;
-    }
-
-    public static int valueEncodingLength()
-    {
-        return 8;
+        return java.nio.charset.StandardCharsets.UTF_8.name();
     }
 
     public static String valueMetaAttribute(final MetaAttribute metaAttribute)
@@ -214,26 +209,78 @@ public final class SingleDataMessageDecoder
         return "";
     }
 
-    public static double valueNullValue()
+    public static int valueHeaderLength()
     {
-        return Double.NaN;
+        return 4;
     }
 
-    public static double valueMinValue()
+    public int valueLength()
     {
-        return -1.7976931348623157E308d;
+        final int limit = parentMessage.limit();
+        return (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
     }
 
-    public static double valueMaxValue()
+    public int skipValue()
     {
-        return 1.7976931348623157E308d;
+        final int headerLength = 4;
+        final int limit = parentMessage.limit();
+        final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
+        final int dataOffset = limit + headerLength;
+        parentMessage.limit(dataOffset + dataLength);
+
+        return dataLength;
     }
 
-    public double value()
+    public int getValue(final MutableDirectBuffer dst, final int dstOffset, final int length)
     {
-        return buffer.getDouble(offset + 4, BYTE_ORDER);
+        final int headerLength = 4;
+        final int limit = parentMessage.limit();
+        final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
+        final int bytesCopied = Math.min(length, dataLength);
+        parentMessage.limit(limit + headerLength + dataLength);
+        buffer.getBytes(limit + headerLength, dst, dstOffset, bytesCopied);
+
+        return bytesCopied;
     }
 
+    public int getValue(final byte[] dst, final int dstOffset, final int length)
+    {
+        final int headerLength = 4;
+        final int limit = parentMessage.limit();
+        final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
+        final int bytesCopied = Math.min(length, dataLength);
+        parentMessage.limit(limit + headerLength + dataLength);
+        buffer.getBytes(limit + headerLength, dst, dstOffset, bytesCopied);
+
+        return bytesCopied;
+    }
+
+    public void wrapValue(final DirectBuffer wrapBuffer)
+    {
+        final int headerLength = 4;
+        final int limit = parentMessage.limit();
+        final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
+        parentMessage.limit(limit + headerLength + dataLength);
+        wrapBuffer.wrap(buffer, limit + headerLength, dataLength);
+    }
+
+    public String value()
+    {
+        final int headerLength = 4;
+        final int limit = parentMessage.limit();
+        final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
+        parentMessage.limit(limit + headerLength + dataLength);
+
+        if (0 == dataLength)
+        {
+            return "";
+        }
+
+        final byte[] tmp = new byte[dataLength];
+        buffer.getBytes(limit + headerLength, tmp, 0, dataLength);
+
+        return new String(tmp, java.nio.charset.StandardCharsets.UTF_8);
+    }
 
     public static int timestampId()
     {
@@ -378,7 +425,7 @@ public final class SingleDataMessageDecoder
         builder.append(this.id());
         builder.append('|');
         builder.append("value=");
-        builder.append(this.value());
+        builder.append('\'').append(value()).append('\'');
         builder.append('|');
         builder.append("timestamp=");
         builder.append('\'').append(timestamp()).append('\'');
@@ -391,6 +438,7 @@ public final class SingleDataMessageDecoder
     public SingleDataMessageDecoder sbeSkip()
     {
         sbeRewind();
+        skipValue();
         skipTimestamp();
 
         return this;

@@ -28,7 +28,7 @@
 
     <message name="SingleDataMessage" id="1" description="단일 속성값 메시지">
         <field name="id" id="1" type="Int32"/>
-        <field name="value" id="2" type="Double"/>
+        <data name="value" id="2" type="varStringEncoding"/>
         <data name="timestamp" id="3" type="varStringEncoding"/>
     </message>
 

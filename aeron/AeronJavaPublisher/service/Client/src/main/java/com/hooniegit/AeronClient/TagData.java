@@ -5,6 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * 테스트용 샘플 데이터 객체입니다.
+ * @param <T>
+ */
 @Getter
 @Setter
 @AllArgsConstructor

@@ -11,7 +11,7 @@ import org.agrona.DirectBuffer;
 @SuppressWarnings("all")
 public final class SingleDataMessageEncoder
 {
-    public static final int BLOCK_LENGTH = 12;
+    public static final int BLOCK_LENGTH = 4;
     public static final int TEMPLATE_ID = 1;
     public static final int SCHEMA_ID = 1;
     public static final int SCHEMA_VERSION = 0;
@@ -155,19 +155,9 @@ public final class SingleDataMessageEncoder
         return 2;
     }
 
-    public static int valueSinceVersion()
+    public static String valueCharacterEncoding()
     {
-        return 0;
-    }
-
-    public static int valueEncodingOffset()
-    {
-        return 4;
-    }
-
-    public static int valueEncodingLength()
-    {
-        return 8;
+        return java.nio.charset.StandardCharsets.UTF_8.name();
     }
 
     public static String valueMetaAttribute(final MetaAttribute metaAttribute)
@@ -180,27 +170,61 @@ public final class SingleDataMessageEncoder
         return "";
     }
 
-    public static double valueNullValue()
+    public static int valueHeaderLength()
     {
-        return Double.NaN;
+        return 4;
     }
 
-    public static double valueMinValue()
+    public SingleDataMessageEncoder putValue(final DirectBuffer src, final int srcOffset, final int length)
     {
-        return -1.7976931348623157E308d;
-    }
+        if (length > 1073741824)
+        {
+            throw new IllegalStateException("length > maxValue for type: " + length);
+        }
 
-    public static double valueMaxValue()
-    {
-        return 1.7976931348623157E308d;
-    }
+        final int headerLength = 4;
+        final int limit = parentMessage.limit();
+        parentMessage.limit(limit + headerLength + length);
+        buffer.putInt(limit, length, BYTE_ORDER);
+        buffer.putBytes(limit + headerLength, src, srcOffset, length);
 
-    public SingleDataMessageEncoder value(final double value)
-    {
-        buffer.putDouble(offset + 4, value, BYTE_ORDER);
         return this;
     }
 
+    public SingleDataMessageEncoder putValue(final byte[] src, final int srcOffset, final int length)
+    {
+        if (length > 1073741824)
+        {
+            throw new IllegalStateException("length > maxValue for type: " + length);
+        }
+
+        final int headerLength = 4;
+        final int limit = parentMessage.limit();
+        parentMessage.limit(limit + headerLength + length);
+        buffer.putInt(limit, length, BYTE_ORDER);
+        buffer.putBytes(limit + headerLength, src, srcOffset, length);
+
+        return this;
+    }
+
+    public SingleDataMessageEncoder value(final String value)
+    {
+        final byte[] bytes = (null == value || value.isEmpty()) ? org.agrona.collections.ArrayUtil.EMPTY_BYTE_ARRAY : value.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+
+        final int length = bytes.length;
+        if (length > 1073741824)
+        {
+            throw new IllegalStateException("length > maxValue for type: " + length);
+        }
+
+        final int headerLength = 4;
+        final int limit = parentMessage.limit();
+        parentMessage.limit(limit + headerLength + length);
+        buffer.putInt(limit, length, BYTE_ORDER);
+        buffer.putBytes(limit + headerLength, bytes, 0, length);
+
+        return this;
+    }
 
     public static int timestampId()
     {
