@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35219.272
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulkDataInserter", "BulkDataInserter.csproj", "{E04C0F5E-E849-4756-A964-81CBEE62784D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E04C0F5E-E849-4756-A964-81CBEE62784D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E04C0F5E-E849-4756-A964-81CBEE62784D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E04C0F5E-E849-4756-A964-81CBEE62784D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E04C0F5E-E849-4756-A964-81CBEE62784D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {958F2044-46D5-47B7-BBE2-6044458F8D72}
+	EndGlobalSection
+EndGlobal
