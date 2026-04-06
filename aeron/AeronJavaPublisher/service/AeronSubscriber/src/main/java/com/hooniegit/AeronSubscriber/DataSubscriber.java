@@ -39,10 +39,10 @@ public class DataSubscriber {
         this.channel = "aeron:ipc";
     }
 
-    public DataSubscriber(final String location, int streamId, String publisherIp, int publisherPort) {
+    public DataSubscriber(final String location, int streamId, String targetIp, int targetPort) {
         this.aeronDir = System.getProperty("java.io.tmpdir") + "/" + location;
         this.streamId = streamId;
-        this.channel = "aeron:udp?endpoint=" + publisherIp + ":" + publisherPort;
+        this.channel = "aeron:udp?endpoint=" + targetIp + ":" + targetPort;
     }
 
     public void startReceiving(DataMessageListener listener) {

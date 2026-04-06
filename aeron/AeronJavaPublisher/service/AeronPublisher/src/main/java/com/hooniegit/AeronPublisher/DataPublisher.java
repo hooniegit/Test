@@ -43,9 +43,14 @@ public class DataPublisher {
     public DataPublisher(String location, int streamId) {
         this.aeronDir = System.getProperty("java.io.tmpdir") + "/" + location;
         this.streamId = streamId;
+        this.channel = "aeron:ipc";
     }
 
-    public DataPublisher(String location, int streamId, String targetIp, int targetPort) {}
+    public DataPublisher(String location, int streamId, String targetIp, int targetPort) {
+        this.aeronDir = System.getProperty("java.io.tmpdir") + "/" + location;
+        this.streamId = streamId;
+        this.channel = "aeron:udp?endpoint=" + targetIp + ":" + targetPort;
+    }
 
     /**
      * 미디어 드라이버에 연결합니다.
@@ -53,7 +58,7 @@ public class DataPublisher {
     public void connect() {
         try {
             this.aeron = Aeron.connect(new Aeron.Context().aeronDirectoryName(aeronDir));
-            this.publication = aeron.addPublication("aeron:ipc", streamId);
+            this.publication = aeron.addPublication(channel, streamId);
             this.isConnected = true;
         } catch (Exception e) {
             log.warn("미디어 드라이버 연결 실패", e);
