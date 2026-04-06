@@ -13,43 +13,57 @@ namespace AeronCSharpSubscriber
 {
     internal class Program
     {
+
+        private static Random random = new Random();
+
         static void Main(string[] args)
         {
+            DataPublisher publisher = new DataPublisher(streamId:11);
+            publisher.Connect();
 
-            using (var subscriber = new DataSubscriber(streamId:10))
+            while (true)
             {
-                // Media Driver 연결
-                subscriber.Connect();
-
-                // ListDataMessage 데이터 수신 Callback 정의
-                subscriber.OnListDataReceived = (data) =>
-                {
-                    var entries = data.Entries;
-                    int entryCount = 0;
-
-                    while (entries.HasNext)
-                    {
-                        entries.Next(); // (필수) 반드시 호출: 데이터 포인트 이동 목적
-                        entryCount++;
-
-                        int currentId = entries.Id;
-                        double currentValue = entries.Value;
-
-                        // 이하에서 currentId, currentValue 값으로 작업 정의
-                        // ...
-                    }
-
-                    string timestamp = data.GetTimestamp();
-
-                    // 이하에서 timestamp 값으로 작업 정의
-                    Console.WriteLine("entry: " + entryCount);
-                    Console.WriteLine("timestamp: " + timestamp);
-
-                };
-
-                // (무한 루프) Subscriber 시작
-                subscriber.Start();
+                string timestamp = DateTime.Now.ToString();
+                int id = random.Next();
+                var value = "Rand_" + id;
+                publisher.PublishSingleDataMessage(id, value, timestamp);
+                
             }
+
+            //using (var subscriber = new DataSubscriber(streamId:10))
+            //{
+            //    // Media Driver 연결
+            //    subscriber.Connect();
+
+            //    // ListDataMessage 데이터 수신 Callback 정의
+            //    subscriber.OnListDataReceived = (data) =>
+            //    {
+            //        var entries = data.Entries;
+            //        int entryCount = 0;
+
+            //        while (entries.HasNext)
+            //        {
+            //            entries.Next(); // (필수) 반드시 호출: 데이터 포인트 이동 목적
+            //            entryCount++;
+
+            //            int currentId = entries.Id;
+            //            double currentValue = entries.Value;
+
+            //            // 이하에서 currentId, currentValue 값으로 작업 정의
+            //            // ...
+            //        }
+
+            //        string timestamp = data.GetTimestamp();
+
+            //        // 이하에서 timestamp 값으로 작업 정의
+            //        Console.WriteLine("entry: " + entryCount);
+            //        Console.WriteLine("timestamp: " + timestamp);
+
+            //    };
+
+            //    // (무한 루프) Subscriber 시작
+            //    subscriber.Start();
+            //}
 
         }
     }

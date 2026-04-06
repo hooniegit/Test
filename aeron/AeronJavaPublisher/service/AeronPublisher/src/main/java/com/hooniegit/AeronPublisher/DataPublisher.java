@@ -20,7 +20,7 @@ public class DataPublisher {
     // Aeron
     private String aeronDir;
     private int streamId;
-    // (Thread-safe)
+    private String channel;
     private Aeron aeron;
     private Publication publication;
     private volatile boolean isConnected = false;
@@ -44,6 +44,8 @@ public class DataPublisher {
         this.aeronDir = System.getProperty("java.io.tmpdir") + "/" + location;
         this.streamId = streamId;
     }
+
+    public DataPublisher(String location, int streamId, String targetIp, int targetPort) {}
 
     /**
      * 미디어 드라이버에 연결합니다.

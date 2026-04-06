@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TestComponent {
 
-    private DataSubscriber subscriber = new DataSubscriber("aeron-sbe-ipc", 10);
+    private DataSubscriber subscriber = new DataSubscriber("aeron-sbe-ipc", 11);
 
 //    private DataSubscriber subscriber = new DataSubscriber("aeron-sbe-ipc", 10,
 //            "0.0.0.0", 1092);
@@ -21,6 +21,10 @@ public class TestComponent {
         subscriber.startReceiving(new DataMessageListener() {
             @Override
             public void onSingleDataReceived(SingleDataMessageDecoder decoder) {
+                int id = decoder.id();
+                String value = decoder.value();
+                String timestamp = decoder.timestamp();
+                System.out.println("[단일 데이터 수신] ID: " + id + ", Value: " + value + ", Timestamp: " + timestamp);
 
             }
 
