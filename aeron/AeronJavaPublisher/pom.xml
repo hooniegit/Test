@@ -11,7 +11,7 @@
 	</parent>
 
 	<groupId>com.hooniegit</groupId>
-	<artifactId>AeronJavaPublisher</artifactId>
+	<artifactId>AeronJavaPackage</artifactId>
 	<version>0.0.1</version>
 	<description>Demo project for Spring Boot</description>
 
@@ -46,8 +46,9 @@
 	</dependencies>
 
 	<modules>
-		<module>service/Client</module>
-		<module>service/Server</module>
+		<module>service/AeronPublisher</module>
+		<module>service/AeronServer</module>
+		<module>service/AeronSubscriber</module>
 	</modules>
 
 	<build>

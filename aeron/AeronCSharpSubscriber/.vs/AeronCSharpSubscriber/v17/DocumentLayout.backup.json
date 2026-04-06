@@ -28,17 +28,11 @@
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "C:\\hooniegit\\Git\\Test\\aeron\\AeronCSharpSubscriber\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAAABAAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-03T00:37:08.091Z",
+              "WhenOpened": "2026-04-06T00:06:51.734Z",
               "EditorCaption": ""
-            }
-          ]
-        },
-        {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 0,
-          "Children": [
+            },
             {
               "$type": "Document",
               "DocumentIndex": 1,
@@ -47,7 +41,7 @@
               "RelativeDocumentMoniker": "Subscriber.cs",
               "ToolTip": "C:\\hooniegit\\Git\\Test\\aeron\\AeronCSharpSubscriber\\Subscriber.cs",
               "RelativeToolTip": "Subscriber.cs",
-              "ViewState": "AgIAAFAAAAAAAAAAAAA8wHUAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABAAAAAAAAAAAAAQwFQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-02T23:58:47.598Z",
               "EditorCaption": ""
