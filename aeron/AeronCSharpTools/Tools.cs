@@ -103,6 +103,10 @@ namespace Tools
         {
             try
             {
+                // 기존 자원 정리
+                _publication?.Dispose();
+                _aeron?.Dispose();
+
                 var ctx = new Aeron.Context().AeronDirectoryName(_aeronDir);
                 _aeron = Aeron.Connect(ctx);
                 _publication = _aeron.AddPublication(_channel, _streamId);
