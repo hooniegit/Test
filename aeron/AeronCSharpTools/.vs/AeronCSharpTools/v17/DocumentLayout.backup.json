@@ -9,6 +9,12 @@
     {
       "AbsoluteMoniker": "D:0:0:{228E0C59-EFDD-40A2-A629-292AE480024C}|AeronCSharpTools.csproj|C:\\hooniegit\\Git\\Test\\aeron\\AeronCSharpTools\\tools.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{228E0C59-EFDD-40A2-A629-292AE480024C}|AeronCSharpTools.csproj|solutionrelative:tools.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{00000000-0000-0000-0000-000000000000}|\u003CSolution\u003E|AeronCSharpTools||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{228E0C59-EFDD-40A2-A629-292AE480024C}|AeronCSharpTools.csproj|c:\\hooniegit\\git\\test\\aeron\\aeroncsharptools\\||{B270807C-D8C6-49EB-8EBE-8E8D566637A1}|5e9a8ac2-4f34-4521-858f-4c248ba31532"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,8 +24,20 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AeronCSharpTools",
+              "DocumentMoniker": "C:\\hooniegit\\Git\\Test\\aeron\\AeronCSharpTools\\AeronCSharpTools.csproj",
+              "RelativeDocumentMoniker": "AeronCSharpTools.csproj",
+              "ToolTip": "C:\\hooniegit\\Git\\Test\\aeron\\AeronCSharpTools\\AeronCSharpTools.csproj",
+              "RelativeToolTip": "AeronCSharpTools.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-04-10T05:08:54.633Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -28,7 +46,7 @@
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "C:\\hooniegit\\Git\\Test\\aeron\\AeronCSharpTools\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-10T00:19:58.228Z",
               "EditorCaption": ""
@@ -41,7 +59,7 @@
               "RelativeDocumentMoniker": "Tools.cs",
               "ToolTip": "C:\\hooniegit\\Git\\Test\\aeron\\AeronCSharpTools\\Tools.cs",
               "RelativeToolTip": "Tools.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8BAAAvAAAAAAAAAA==",
+              "ViewState": "AgIAAI0AAAAAAAAAAAAkwG8AAABDAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-10T00:19:53.662Z",
               "EditorCaption": ""

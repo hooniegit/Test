@@ -12,7 +12,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{228E0C59-EFDD-40A2-A629-292AE480024C}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>AeronCSharpTools</RootNamespace>
     <AssemblyName>AeronCSharpTools</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>

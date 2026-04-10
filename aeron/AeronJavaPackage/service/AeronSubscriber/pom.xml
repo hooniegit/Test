@@ -1,0 +1,22 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.hooniegit</groupId>
+        <artifactId>AeronJavaPackage</artifactId>
+        <version>0.0.1</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>AeronSubscriber</artifactId>
+    <!--    <packaging>jar</packaging>-->
+
+    <dependencies>
+        <dependency>
+            <groupId>com.hooniegit</groupId>
+            <artifactId>AeronJavaTools</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+    </dependencies>
+
+</project>

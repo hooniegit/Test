@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: AeronJavaTools
+
+aeron:
+  server:
+    location: aeron-sbe-ipc
+    monitoring:
+      interval: 60000
